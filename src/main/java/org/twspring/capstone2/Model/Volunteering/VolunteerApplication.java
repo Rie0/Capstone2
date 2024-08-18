@@ -27,10 +27,9 @@ public class VolunteerApplication {
     @Column(columnDefinition = "INT NOT NULL")
     private Integer volunteerId;
 
-    //(2)
-    @Pattern(regexp = "^(Perfect|Good|acceptable|Weak)$")
+    @Pattern(regexp = "^(Excellent|Good|Average|Poor)$")
     @Column(columnDefinition = "VARCHAR(25) NOT NULL")
-    private String fitScore; //a point for each attribute required
+    private String suitability;
 
     @NotNull(message = "Application date cannot be null")
     @JsonFormat(pattern = "yyyy-MM-dd")
