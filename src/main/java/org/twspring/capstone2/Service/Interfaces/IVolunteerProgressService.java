@@ -9,9 +9,10 @@ public interface IVolunteerProgressService {
     List<VolunteerProgress> getVolunteerProgressesByOpportunityId(Integer organizerId, Integer opportunityId); //for the org
     List<VolunteerProgress> getAllVolunteerProgressesByVolunteerId(Integer volunteerId); //for the vol
 
-     //create in within the application service as accept
     //set
+    public void editNoteOnVolunteerProgress(Integer id, Integer organizerId, String note);
+
     void addHoursToVolunteerProgress(Integer id, Integer organizerId, Integer opportunityId, Integer hours);
     void withdrawFromVolunteeringOpportunity(Integer id, Integer volunteerId);
-    void kickVolunteerFromVolunteeringOpportunity(Integer id, Integer organizerId, Integer opportunityId);
+    void kickVolunteerFromVolunteeringOpportunity(Integer id, Integer supervisorId);
 }

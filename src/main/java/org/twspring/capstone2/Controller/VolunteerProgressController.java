@@ -17,7 +17,7 @@ public class VolunteerProgressController {
     private final VolunteerProgressService volunteerProgressService;
 
     //===========================GET===========================
-    @GetMapping("/get/opportunity/{opportunityId}")
+    @GetMapping("/get/opportunity/{organizerId}/{opportunityId}")
     public ResponseEntity getVolunteerProgressesByOpportunityId(@PathVariable Integer organizerId, @PathVariable Integer opportunityId) {
         return ResponseEntity.status(200).body(volunteerProgressService.getVolunteerProgressesByOpportunityId(organizerId, opportunityId));
     }
@@ -37,20 +37,25 @@ public class VolunteerProgressController {
         volunteerProgressService.addHoursToVolunteerProgress(id, organizerId, opportunityId, hours);
         return ResponseEntity.status(200).body(new ApiResponse("Hours added successfully"));
     }
+    @PutMapping("/edit-note/{id}/{organizerId}")
+    public ResponseEntity editNoteOnVolunteerProgress(@PathVariable Integer id,
+                                                         @PathVariable Integer organizerId,
+                                                         @RequestBody String comment) {
+        volunteerProgressService.editNoteOnVolunteerProgress(id, organizerId, comment);
+        return ResponseEntity.status(200).body(new ApiResponse("Comment edited successfully"));
+    }
 
-    //===========================DELETE===========================
-    @DeleteMapping("/withdraw/{id}/{volunteerId}")
+    @PutMapping("/withdraw/{id}/{volunteerId}")
     public ResponseEntity withdrawFromVolunteeringOpportunity(@PathVariable Integer id,
                                                               @PathVariable Integer volunteerId) {
         volunteerProgressService.withdrawFromVolunteeringOpportunity(id, volunteerId);
         return ResponseEntity.status(200).body(new ApiResponse("Withdrawn from volunteering opportunity successfully"));
     }
 
-    @DeleteMapping("/kick/{id}/{organizerId}/{opportunityId}")
+    @PutMapping("/kick/{id}/{organizerId}")
     public ResponseEntity kickVolunteerFromVolunteeringOpportunity(@PathVariable Integer id,
-                                                                   @PathVariable Integer organizerId,
-                                                                   @PathVariable Integer opportunityId) {
-        volunteerProgressService.kickVolunteerFromVolunteeringOpportunity(id, organizerId, opportunityId);
+                                                                   @PathVariable Integer organizerId) {
+        volunteerProgressService.kickVolunteerFromVolunteeringOpportunity(id, organizerId);
         return ResponseEntity.status(200).body(new ApiResponse("Volunteer kicked from volunteering opportunity successfully"));
     }
 }

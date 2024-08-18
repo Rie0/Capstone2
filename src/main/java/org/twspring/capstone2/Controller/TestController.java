@@ -116,19 +116,19 @@ public class TestController {
         Volunteer volunteer1 = new Volunteer(
                 null, "volunteer1@gmail.com", "paSsswo#rd123", "volunteer1", "Aisha", "Bassam", 25, "+966512345678",
                 "F", "university student", "Bio of Volunteer 1 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", true, true, false, true, false, true, true, true,
-                false, 1, 0, 0, 0
+                false, 1,0, 0, 0, 0
         );
 
         Volunteer volunteer2 = new Volunteer(
                 null, "volunteer2@gmail.com", "P@ssw0rd123", "volunteer2", "Fahad", "Mansoor", 22, "+966512345681",
                 "M", "university student", "Bio of Volunteer 2 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", true, false, false, true, true, false, false, true,
-                true, 2, 1, 0, 0
+                true, 2, 0,0, 0, 0
         );
 
         Volunteer volunteer3 = new Volunteer(
                 null, "volunteer3@gmail.com", "Str0ngP@ssw0rd", "volunteer3", "Layla", "Saeed", 28, "+966512345680",
                 "F", "unemployed", "Bio of Volunteer 3 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", false, true, true, false, true, true, true, true,
-                true, 3, 2, 1, 0
+                true, 3, 0,0, 0, 0
         );
         volunteerService.addVolunteer(volunteer1);
         volunteerService.addVolunteer(volunteer2);

@@ -9,6 +9,6 @@ public interface IVolunteerApplicationService {
     List<VolunteerApplication> getVolunteerApplicationsByVolunteerId(Integer volunteerId);
     void applyForVolunteeringOpportunity(Integer volunteerId, Integer volunteeringOpportunityId);
     void acceptVolunteerIntoOpportunity(Integer id, Integer opportunityId, Integer organizerId);
-    void rejectVolunteerFromOpportunity(Integer id, Integer opportunityId, Integer organizerId); //add a status to the application for this
+    void rejectVolunteerFromOpportunity(Integer id, Integer opportunityId, Integer organizerId);
     void withdrawVolunteerApplication(Integer id, Integer volunteerId);
 }

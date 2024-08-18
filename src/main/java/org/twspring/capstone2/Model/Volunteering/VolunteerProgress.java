@@ -43,6 +43,4 @@ public class VolunteerProgress {
     @Size(min= 25, max = 500, message = "Notes must have between 25 to 500 characters")
     private String notes;
 
-    //maybe accepts a list of volunteers id's to update all? by attendance? so hours are much easier to calculate???
-
 }
