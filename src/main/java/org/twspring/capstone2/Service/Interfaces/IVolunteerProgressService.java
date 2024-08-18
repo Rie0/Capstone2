@@ -11,7 +11,7 @@ public interface IVolunteerProgressService {
 
      //create in within the application service as accept
     //set
-    void addHoursToVolunteerProgress(Integer organizerId, Integer id, Integer hours);
+    void addHoursToVolunteerProgress(Integer id, Integer organizerId, Integer opportunityId, Integer hours);
     void withdrawFromVolunteeringOpportunity(Integer id, Integer volunteerId);
-    void kickVolunteerFromVolunteeringOpportunity(Integer id, Integer organizerId);
+    void kickVolunteerFromVolunteeringOpportunity(Integer id, Integer organizerId, Integer opportunityId);
 }
