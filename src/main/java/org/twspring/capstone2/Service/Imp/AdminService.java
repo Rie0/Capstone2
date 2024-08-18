@@ -1,6 +1,5 @@
 package org.twspring.capstone2.Service.Imp;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.twspring.capstone2.Api.ApiException;
@@ -20,7 +19,7 @@ public class AdminService implements IAdminService {
     public List<Admin> getAllAdmins() {
         List<Admin> admins = adminRepository.findAll();
         if (admins.isEmpty()) {
-            throw new EntityNotFoundException("No admins found");
+            throw new ApiException("No admins found");
         }
         return admins;
     }
