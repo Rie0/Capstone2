@@ -3,7 +3,6 @@ package org.twspring.capstone2.Service.Imp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.twspring.capstone2.Api.ApiException;
-import org.twspring.capstone2.Model.Organizations.Organization;
 import org.twspring.capstone2.Model.Users.Organizer;
 import org.twspring.capstone2.Model.Users.Volunteer;
 import org.twspring.capstone2.Model.Volunteering.VolunteerProgress;
@@ -83,6 +82,17 @@ public class VolunteerProgressService implements IVolunteerProgressService {
         }
 
         volunteerProgress.setCompletedHours(volunteerProgress.getCompletedHours()+hours);
+        volunteerProgressRepository.save(volunteerProgress);
+
+        //check if volunteer reached the target hours
+        if (volunteerProgress.getCompletedHours() >= volunteerProgress.getTargetHours()){
+            volunteerProgress.setStatus("Completed");
+            volunteerProgressRepository.save(volunteerProgress);
+            //edit the volunteer profile
+           Volunteer volunteer = volunteerRepository.findVolunteerById(volunteerProgress.getVolunteerId());
+           volunteer.setNumberOfOpportunitiesCompleted(volunteer.getNumberOfOpportunitiesCompleted()+1);
+           volunteerRepository.save(volunteer);
+        }
 
     }
 

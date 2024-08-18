@@ -11,7 +11,7 @@ import java.util.List;
 public interface VolunteerApplicationRepository extends JpaRepository<VolunteerApplication, Integer> {
     VolunteerApplication findVolunteerApplicationById(Integer id);
     List<VolunteerApplication> findVolunteerApplicationByVolunteerId(Integer volunteerId);
-    List<VolunteerApplication>  findVolunteerApplicationByOpportunityId(Integer volunteerId);
+    List<VolunteerApplication>  findVolunteerApplicationByOpportunityId(Integer opportunityId);
 
     @Query ("SELECT a FROM VolunteerApplication a WHERE a.status='Pending'")
     List<VolunteerApplication> findVolunteerApplicationWithPendingStatus();

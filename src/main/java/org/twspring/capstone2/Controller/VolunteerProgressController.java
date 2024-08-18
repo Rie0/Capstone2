@@ -18,7 +18,7 @@ public class VolunteerProgressController {
 
     //===========================GET===========================
     @GetMapping("/get/opportunity/{opportunityId}")
-    public ResponseEntity getVolunteerProgressesByOpportunityId(@RequestParam Integer organizerId, @PathVariable Integer opportunityId) {
+    public ResponseEntity getVolunteerProgressesByOpportunityId(@PathVariable Integer organizerId, @PathVariable Integer opportunityId) {
         return ResponseEntity.status(200).body(volunteerProgressService.getVolunteerProgressesByOpportunityId(organizerId, opportunityId));
     }
 
@@ -28,32 +28,28 @@ public class VolunteerProgressController {
     }
 
     //===========================PUT===========================
-    @PutMapping("/add-hours/{id}")
+    @PutMapping("/add-hours/{id}/{opportunityId}/{organizerId}/{hours}")
     public ResponseEntity addHoursToVolunteerProgress(@PathVariable Integer id,
-                                                      @RequestParam Integer organizerId,
-                                                      @RequestParam Integer opportunityId,
-                                                      @RequestParam Integer hours,
-                                                      Errors errors) {
-        if (errors.hasErrors()) {
-            String message = errors.getFieldError().getDefaultMessage();
-            return ResponseEntity.status(404).body(message);
-        }
+                                                      @PathVariable Integer opportunityId,
+                                                      @PathVariable Integer organizerId,
+                                                      @PathVariable Integer hours) {
+
         volunteerProgressService.addHoursToVolunteerProgress(id, organizerId, opportunityId, hours);
         return ResponseEntity.status(200).body(new ApiResponse("Hours added successfully"));
     }
 
     //===========================DELETE===========================
-    @DeleteMapping("/withdraw/{id}")
+    @DeleteMapping("/withdraw/{id}/{volunteerId}")
     public ResponseEntity withdrawFromVolunteeringOpportunity(@PathVariable Integer id,
-                                                              @RequestParam Integer volunteerId) {
+                                                              @PathVariable Integer volunteerId) {
         volunteerProgressService.withdrawFromVolunteeringOpportunity(id, volunteerId);
         return ResponseEntity.status(200).body(new ApiResponse("Withdrawn from volunteering opportunity successfully"));
     }
 
-    @DeleteMapping("/kick/{id}")
+    @DeleteMapping("/kick/{id}/{organizerId}/{opportunityId}")
     public ResponseEntity kickVolunteerFromVolunteeringOpportunity(@PathVariable Integer id,
-                                                                   @RequestParam Integer organizerId,
-                                                                   @RequestParam Integer opportunityId) {
+                                                                   @PathVariable Integer organizerId,
+                                                                   @PathVariable Integer opportunityId) {
         volunteerProgressService.kickVolunteerFromVolunteeringOpportunity(id, organizerId, opportunityId);
         return ResponseEntity.status(200).body(new ApiResponse("Volunteer kicked from volunteering opportunity successfully"));
     }

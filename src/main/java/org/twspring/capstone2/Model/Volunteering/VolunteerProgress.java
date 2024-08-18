@@ -25,7 +25,7 @@ public class VolunteerProgress {
 
     //initiated at undergoing by default and at the add method
     @NotBlank
-    @Pattern(regexp = "Undergoing|Completed|Kicked|Withdrew", message = "Status must be one of: Undergoing, Completed, Kicked, Withdrew")
+    @Pattern(regexp = "Ongoing|Completed|Kicked|Withdrew", message = "Status must be one of: Undergoing, Completed, Kicked, Withdrew")
     @Column(columnDefinition = "VARCHAR(25) NOT NULL")
     private String status;
 
@@ -34,8 +34,8 @@ public class VolunteerProgress {
     @Column(columnDefinition = "INT NOT NULL")
     private Integer targetHours; //takes the value from the opportunity
 
-    @NotNull(message = "Target hours cannot be null")
-    @Positive( message = "Target hours must be at least 1")
+    @NotNull(message = "Completed hours cannot be null")
+    @PositiveOrZero( message = "Completed hours must be at least 0")
     @Column(columnDefinition = "INT NOT NULL")
     private Integer completedHours;
 

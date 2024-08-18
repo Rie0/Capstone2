@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.twspring.capstone2.Api.ApiResponse;
-import org.twspring.capstone2.Model.Volunteering.VolunteerApplication;
 import org.twspring.capstone2.Service.Imp.VolunteerApplicationService;
 
 @RestController
@@ -23,39 +22,34 @@ public class VolunteerApplicationController {
     }
 
     //===========================POST===========================
-    @PostMapping("/apply")
-    public ResponseEntity applyForVolunteeringOpportunity(@RequestParam Integer volunteerId,
-                                                          @RequestParam Integer volunteeringOpportunityId,
-                                                          @Valid @RequestBody VolunteerApplication volunteerApplication, Errors errors) {
-        if (errors.hasErrors()) {
-            String message = errors.getFieldError().getDefaultMessage();
-            return ResponseEntity.status(404).body(message);
-        }
-        volunteerApplicationService.applyForVolunteeringOpportunity(volunteerId, volunteeringOpportunityId, volunteerApplication);
+    @PostMapping("/apply/{volunteerId}/{volunteeringOpportunityId}")
+    public ResponseEntity applyForVolunteeringOpportunity(@PathVariable Integer volunteerId,
+                                                          @PathVariable Integer volunteeringOpportunityId) {
+        volunteerApplicationService.applyForVolunteeringOpportunity(volunteerId, volunteeringOpportunityId);
         return ResponseEntity.status(201).body(new ApiResponse("Application submitted successfully"));
     }
 
     //===========================PUT===========================
-    @PutMapping("/accept/{id}")
+    @PutMapping("/accept/{id}/{opportunityId}/{organizerId}")
     public ResponseEntity acceptVolunteerIntoOpportunity(@PathVariable Integer id,
-                                                         @RequestParam Integer opportunityId,
-                                                         @RequestParam Integer organizerId) {
+                                                         @PathVariable Integer opportunityId,
+                                                         @PathVariable Integer organizerId) {
         volunteerApplicationService.acceptVolunteerIntoOpportunity(id, opportunityId, organizerId);
         return ResponseEntity.status(200).body(new ApiResponse("Volunteer accepted successfully"));
     }
 
-    @PutMapping("/reject/{id}")
+    @PutMapping("/reject/{id}/{opportunityId}/{organizerId}")
     public ResponseEntity rejectVolunteerIntoOpportunity(@PathVariable Integer id,
-                                                         @RequestParam Integer opportunityId,
-                                                         @RequestParam Integer organizerId) {
+                                                         @PathVariable Integer opportunityId,
+                                                         @PathVariable Integer organizerId) {
         volunteerApplicationService.rejectVolunteerIntoOpportunity(id, opportunityId, organizerId);
         return ResponseEntity.status(200).body(new ApiResponse("Volunteer rejected successfully"));
     }
 
     //===========================DELETE===========================
-    @DeleteMapping("/withdraw/{id}")
+    @DeleteMapping("/withdraw/{id}/{volunteerId}")
     public ResponseEntity withdrawVolunteerApplication(@PathVariable Integer id,
-                                                       @RequestParam Integer volunteerId) {
+                                                       @PathVariable Integer volunteerId) {
         volunteerApplicationService.withdrawVolunteerApplication(id, volunteerId);
         return ResponseEntity.status(200).body(new ApiResponse("Application withdrawn successfully"));
     }
