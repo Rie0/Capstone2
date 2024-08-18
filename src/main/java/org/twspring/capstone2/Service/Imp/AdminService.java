@@ -35,12 +35,12 @@ public class AdminService implements IAdminService {
         if(a == null) {
             throw new ApiException("Admin with ID "+id+" not found");
         }
-        //commented are the ones that doesn't make sense to change
+        //commented fields are the ones that don't make sense to change
         a.setEmail(admin.getEmail());
         a.setPhoneNumber(admin.getPhoneNumber());
         a.setUsername(admin.getUsername());
-        a.setFirstName(admin.getFirstName());
-        a.setLastName(admin.getLastName());
+        //a.setFirstName(admin.getFirstName());
+        //a.setLastName(admin.getLastName());
         a.setPassword(admin.getPassword());
         adminRepository.save(a);
     }

@@ -35,13 +35,14 @@ public class OrganizerService implements IOrganizerService {
         if (existingOrganizer == null) {
             throw new EntityNotFoundException("Organizer with ID " + id + " not found");
         }
+        //commented fields are the ones that don't make sense to change
         existingOrganizer.setEmail(organizer.getEmail());
         existingOrganizer.setPhoneNumber(organizer.getPhoneNumber());
         existingOrganizer.setUsername(organizer.getUsername());
-        existingOrganizer.setFirstName(organizer.getFirstName());
-        existingOrganizer.setLastName(organizer.getLastName());
+//        existingOrganizer.setFirstName(organizer.getFirstName());
+//        existingOrganizer.setLastName(organizer.getLastName());
         existingOrganizer.setPassword(organizer.getPassword());
-        existingOrganizer.setRole(organizer.getRole());
+//        existingOrganizer.setRole(organizer.getRole()); //only a supervisor can edit this field
         // Organization ID should not be updated, so it's not included here
         organizerRepository.save(existingOrganizer);
     }

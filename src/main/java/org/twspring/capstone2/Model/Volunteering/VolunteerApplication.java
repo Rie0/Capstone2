@@ -35,7 +35,7 @@ public class VolunteerApplication {
     @NotNull(message = "Application date cannot be null")
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(columnDefinition = "DATE NOT NULL DEFAULT TIMESTAMP(CURRENT_DATE)")
-    private LocalDate applicationDate; //final
+    private final LocalDate applicationDate = LocalDate.now();
 
     @Pattern(regexp = "^(Pending|Accepted|Rejected)$")
     @Column(columnDefinition = "VARCHAR(25) NOT NULL")
@@ -46,5 +46,5 @@ public class VolunteerApplication {
 
     //must be approved by an organizer of the organization
 
-    //must be qualified
+    //must be qualified to apply
 }

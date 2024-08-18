@@ -45,7 +45,6 @@ public class VolunteeringOpportunityService implements IVolunteeringOpportunityS
         if (organization == null) {
             throw new ApiException("Organization with ID " + organizationId + " not found");
         }
-
         // Verify the organizer and check if they are a supervisor
         Organizer organizer = organizerRepository.findOrganizerById(organizerId);
         if (organizer == null) {

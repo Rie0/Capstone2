@@ -35,13 +35,14 @@ public class UniversityStaffService implements IUniversityStaffService {
         if (existingStaff == null) {
             throw new EntityNotFoundException("University staff with ID " + id + " not found");
         }
+        //commented fields are the ones that don't make sense to change
         existingStaff.setEmail(universityStaff.getEmail());
         existingStaff.setPhoneNumber(universityStaff.getPhoneNumber());
         existingStaff.setUsername(universityStaff.getUsername());
-        existingStaff.setFirstName(universityStaff.getFirstName());
-        existingStaff.setLastName(universityStaff.getLastName());
+//        existingStaff.setFirstName(universityStaff.getFirstName());
+//        existingStaff.setLastName(universityStaff.getLastName());
         existingStaff.setPassword(universityStaff.getPassword());
-        existingStaff.setUniversityId(universityStaff.getUniversityId());
+//        existingStaff.setUniversityId(universityStaff.getUniversityId());
         universityStaffRepository.save(existingStaff);
     }
 

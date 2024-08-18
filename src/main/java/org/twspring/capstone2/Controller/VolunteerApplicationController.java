@@ -16,9 +16,14 @@ public class VolunteerApplicationController {
     private final VolunteerApplicationService volunteerApplicationService;
 
     //===========================GET===========================
-    @GetMapping("/get/all/{opportunityId}")
-    public ResponseEntity getAllVolunteerApplicationsForOpportunity(@PathVariable Integer opportunityId) {
-        return ResponseEntity.status(200).body(volunteerApplicationService.getAllVolunteerApplicationsForOpportunity(opportunityId));
+    @GetMapping("/get/all/{supervisorId}/{opportunityId}")
+    public ResponseEntity getAllVolunteerApplicationsForOpportunity(@PathVariable Integer supervisorId, @PathVariable Integer opportunityId) {
+        return ResponseEntity.status(200).body(volunteerApplicationService.getAllVolunteerApplicationsForOpportunity(supervisorId,opportunityId));
+    }
+
+    @GetMapping("/get/for-volunteer/{volunteerId}")
+    public ResponseEntity getVolunteerApplication(@PathVariable Integer volunteerId) {
+        return ResponseEntity.status(200).body(volunteerApplicationService.getVolunteerApplicationsByVolunteerId(volunteerId));
     }
 
     //===========================POST===========================
@@ -39,10 +44,10 @@ public class VolunteerApplicationController {
     }
 
     @PutMapping("/reject/{id}/{opportunityId}/{organizerId}")
-    public ResponseEntity rejectVolunteerIntoOpportunity(@PathVariable Integer id,
+    public ResponseEntity rejectVolunteerFromOpportunity(@PathVariable Integer id,
                                                          @PathVariable Integer opportunityId,
                                                          @PathVariable Integer organizerId) {
-        volunteerApplicationService.rejectVolunteerIntoOpportunity(id, opportunityId, organizerId);
+        volunteerApplicationService.rejectVolunteerFromOpportunity(id, opportunityId, organizerId);
         return ResponseEntity.status(200).body(new ApiResponse("Volunteer rejected successfully"));
     }
 

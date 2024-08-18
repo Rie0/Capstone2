@@ -11,7 +11,6 @@ import org.twspring.capstone2.Model.Volunteering.VolunteeringOpportunity;
 import org.twspring.capstone2.Repository.*;
 import org.twspring.capstone2.Service.Interfaces.IVolunteerApplicationService;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -24,9 +23,13 @@ public class VolunteerApplicationService implements IVolunteerApplicationService
     private final VolunteerProgressRepository volunteerProgressRepository;
 
     @Override
-    public List<VolunteerApplication> getAllVolunteerApplicationsForOpportunity(Integer opportunityId) { //edit so only supervisor can see
-        if (volunteeringOpportunityRepository.findVolunteeringOpportunityById(opportunityId)== null) {
-            throw new ApiException("Opportunity with id " + opportunityId + " not found");
+    public List<VolunteerApplication> getAllVolunteerApplicationsForOpportunity(Integer opportunityId, Integer supervisorId) { //edit so only supervisor can see
+       VolunteeringOpportunity vo = volunteeringOpportunityRepository.findVolunteeringOpportunityById(opportunityId);
+        if (vo== null) {
+            throw new ApiException("Volunteering opportunity with id " + opportunityId + " not found");
+        }
+        if(vo.getSupervisorId()!=supervisorId){
+            throw  new ApiException("Only the supervisor of this opportunity can view the applications");
         }
         List<VolunteerApplication> volunteerApplications = volunteerApplicationRepository.findVolunteerApplicationByOpportunityId(opportunityId);
         if (volunteerApplications.isEmpty()) {
@@ -35,7 +38,18 @@ public class VolunteerApplicationService implements IVolunteerApplicationService
         return volunteerApplications;
     }
 
-    //get applications by volunteer id for the volunteer
+    @Override    //get applications by volunteer id for the volunteer
+    public List<VolunteerApplication> getVolunteerApplicationsByVolunteerId(Integer volunteerId) {
+        List<VolunteerApplication> volunteerApplications = volunteerApplicationRepository.findVolunteerApplicationByVolunteerId(volunteerId);
+
+        if (volunteerApplications.isEmpty()) {
+            throw new ApiException("No applications found for volunteer with id " + volunteerId);
+        }
+
+        return volunteerApplications;
+    }
+
+
 
     @Override
     public void applyForVolunteeringOpportunity(Integer volunteerId, Integer volunteeringOpportunityId) {
@@ -49,9 +63,8 @@ public class VolunteerApplicationService implements IVolunteerApplicationService
             throw new ApiException("VolunteeringOpportunity with id " + volunteeringOpportunityId + " not found");
         }
 
-        //check if the user has already applied (replace with a repository method???)
-        List<VolunteerApplication> volunteerApplications = volunteerApplicationRepository.findVolunteerApplicationByOpportunityId(volunteeringOpportunityId);
-        for (VolunteerApplication va: volunteerApplications) {
+        //check if the volunteer has already applied
+        for (VolunteerApplication va: volunteerApplicationRepository.findVolunteerApplicationByOpportunityId(volunteeringOpportunityId)) {
             if (va.getVolunteerId()==volunteer.getId()) {
                 throw new ApiException("Volunteer already applied to this opportunity");
             }
@@ -62,16 +75,20 @@ public class VolunteerApplicationService implements IVolunteerApplicationService
         VolunteerApplication volunteerApplication = new VolunteerApplication();
         volunteerApplication.setVolunteerId(volunteerId);
         volunteerApplication.setOpportunityId(volunteeringOpportunityId);
-        volunteerApplication.setApplicationDate(LocalDate.now());
         volunteerApplication.setFitScore("Good");
         volunteerApplication.setStatus("Pending");
         //(2)calculate fit score
         volunteerApplicationRepository.save(volunteerApplication);
     }
 
-    @Override //disallow duplicates
+    @Override
     public void acceptVolunteerIntoOpportunity(Integer id, Integer opportunityId, Integer organizerId) {
+        VolunteerApplication volunteerApplication = volunteerApplicationRepository.findVolunteerApplicationById(id);
         VolunteeringOpportunity opportunity = volunteeringOpportunityRepository.findVolunteeringOpportunityById(opportunityId);
+
+        if (volunteerApplication == null) {
+            throw new ApiException("Volunteer application with id " + id + " not found");
+        }
        //valid opportunity
         if (opportunity == null) {
             throw new ApiException("Volunteer with id " + opportunityId + " not found");
@@ -87,12 +104,14 @@ public class VolunteerApplicationService implements IVolunteerApplicationService
         if (organizer.getOrganizationId()!=opportunity.getOrganizationId()){
             throw new ApiException("Organizer doesn't belong to the organization");
         }
-        if (!organizer.getRole().equalsIgnoreCase("Supervisor")){
-            throw new ApiException("Only supervisors can accept volunteers");
+        if (organizer.getId()!=opportunity.getId()){
+            throw new ApiException("Only the supervisor of this opportunity can accept volunteers");
         }
-        VolunteerApplication volunteerApplication = volunteerApplicationRepository.findVolunteerApplicationById(id);
 
         //disallow duplicates
+        if (!volunteerApplication.getStatus().equalsIgnoreCase("Pending")) {
+            throw new ApiException("Only pending applications can be accepted");
+        }
 
         //Create a volunteerProgress object
         VolunteerProgress volunteerProgress = new VolunteerProgress();
@@ -103,13 +122,16 @@ public class VolunteerApplicationService implements IVolunteerApplicationService
         volunteerProgress.setTargetHours(opportunity.getTargetHours());
         volunteerProgress.setStatus("Ongoing");
         volunteerProgressRepository.save(volunteerProgress);
+
         volunteerApplication.setStatus("Accepted");
         volunteerApplicationRepository.save(volunteerApplication);
 
         //Edit the opportunity stats
         opportunity.setCurrentCapacity(opportunity.getCurrentCapacity()+1);
         volunteeringOpportunityRepository.save(opportunity);
-        if (opportunity.getCurrentCapacity()>=opportunity.getMaxCapacity()){ //close the opportunity if capacity is maxed
+
+        //close the opportunity if capacity is maxed
+        if (opportunity.getCurrentCapacity()>=opportunity.getMaxCapacity()){
             opportunity.setRegistrationOpen(false);
             volunteeringOpportunityRepository.save(opportunity);
         //Edit reject pending volunteers
@@ -119,13 +141,16 @@ public class VolunteerApplicationService implements IVolunteerApplicationService
             volunteerApplicationRepository.save(application);
         }
         }
-
-
     }
 
     @Override
-    public void rejectVolunteerIntoOpportunity(Integer id, Integer opportunityId, Integer organizerId) {
+    public void rejectVolunteerFromOpportunity(Integer id, Integer opportunityId, Integer organizerId) {
         VolunteeringOpportunity opportunity = volunteeringOpportunityRepository.findVolunteeringOpportunityById(opportunityId);
+        VolunteerApplication volunteerApplication = volunteerApplicationRepository.findVolunteerApplicationById(id);
+
+        if (volunteerApplication == null) {
+            throw new ApiException("Volunteer application with id " + id + " not found");
+        }
         //valid opportunity
         if (opportunity == null) {
             throw new ApiException("Volunteer with id " + opportunityId + " not found");
@@ -144,7 +169,11 @@ public class VolunteerApplicationService implements IVolunteerApplicationService
         if (!organizer.getRole().equalsIgnoreCase("Supervisor")){
             throw new ApiException("Only supervisors can accept volunteers");
         }
-        VolunteerApplication volunteerApplication = volunteerApplicationRepository.findVolunteerApplicationById(id);
+
+        if (!volunteerApplication.getStatus().equalsIgnoreCase("pending")) {
+            throw new ApiException("Only pending applications can be rejected");
+        }
+
         volunteerApplication.setStatus("Rejected");
         volunteerApplicationRepository.save(volunteerApplication);
     }
@@ -160,7 +189,10 @@ public class VolunteerApplicationService implements IVolunteerApplicationService
             throw new ApiException("Volunteer with id " + volunteerId + " not found");
         }
         if (volunteer.getId()!=volunteerApplication.getVolunteerId()){
-            throw new ApiException("Volunteer doesn't own this application");
+            throw new ApiException("Only the volunteer of this application can withdraw");
+        }
+        if (!volunteerApplication.getStatus().equalsIgnoreCase("pending")) {
+            throw new ApiException("Only pending applications can be withdrawn");
         }
         volunteerApplicationRepository.delete(volunteerApplication);
     }

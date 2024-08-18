@@ -10,6 +10,7 @@ import java.util.List;
 @Repository
 public interface VolunteerApplicationRepository extends JpaRepository<VolunteerApplication, Integer> {
     VolunteerApplication findVolunteerApplicationById(Integer id);
+
     List<VolunteerApplication> findVolunteerApplicationByVolunteerId(Integer volunteerId);
     List<VolunteerApplication>  findVolunteerApplicationByOpportunityId(Integer opportunityId);
 

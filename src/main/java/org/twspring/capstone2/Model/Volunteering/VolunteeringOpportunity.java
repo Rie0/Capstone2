@@ -66,7 +66,7 @@ public class VolunteeringOpportunity {
     @Column(columnDefinition = "DATE NOT NULL")
     private LocalDate endDate;
 
-    //@NotNull(message = "Current capacity cannot be null")
+    @NotNull(message = "Current capacity cannot be null")
     @PositiveOrZero(message = "Current capacity must be zero or greater")
     @Column(columnDefinition = "INT NOT NULL DEFAULT 0")
     private Integer currentCapacity;
@@ -126,8 +126,4 @@ public class VolunteeringOpportunity {
     @NotNull(message = "Travel capability cannot be null")
     @Column(columnDefinition = "BOOLEAN NOT NULL")
     private boolean canTravel;
-
-    //posted by an organizer of the organization
-
-    //has conditions that must be applied for the volunteer to apply (gender/employment condition/age/is physically fit)
 }
