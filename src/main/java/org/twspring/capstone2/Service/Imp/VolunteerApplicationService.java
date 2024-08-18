@@ -75,9 +75,8 @@ public class VolunteerApplicationService implements IVolunteerApplicationService
         VolunteerApplication volunteerApplication = new VolunteerApplication();
         volunteerApplication.setVolunteerId(volunteerId);
         volunteerApplication.setOpportunityId(volunteeringOpportunityId);
-        volunteerApplication.setFitScore("Good");
+        volunteerApplication.setSuitability(calculateSuitabilityScore(volunteer, volunteeringOpportunity));
         volunteerApplication.setStatus("Pending");
-        //(2)calculate fit score
         volunteerApplicationRepository.save(volunteerApplication);
     }
 
@@ -195,5 +194,57 @@ public class VolunteerApplicationService implements IVolunteerApplicationService
             throw new ApiException("Only pending applications can be withdrawn");
         }
         volunteerApplicationRepository.delete(volunteerApplication);
+    }
+
+
+    //
+    private String calculateSuitabilityScore(Volunteer volunteer, VolunteeringOpportunity opportunity){
+        int score = 0;
+        //compare
+        if (opportunity.getRequiredGender().equalsIgnoreCase("Any") || opportunity.getRequiredGender().equalsIgnoreCase(volunteer.getGender())) {
+            score += 1;
+        } else {
+            return "Poor";
+        }
+        if (opportunity.getRequiredEmploymentStatus().equalsIgnoreCase("Any") || opportunity.getRequiredEmploymentStatus().equalsIgnoreCase(volunteer.getEmploymentStatus())) {
+            score += 1;
+        }else {
+            return "Poor";
+        }
+        if (opportunity.getMinAge() == null || volunteer.getAge() >= opportunity.getMinAge()) {
+            score += 1;
+        }else{
+            return "Poor";
+        }
+        if (volunteer.isPhysicallyFit() == opportunity.isPhysicallyFit()) {
+            score += 1;
+        }
+        if (volunteer.isAvailableForWeekends() == opportunity.isAvailableForWeekends()) {
+            score += 1;
+        }
+        if (volunteer.isHasDriversLicense() == opportunity.isHasDriversLicense()) {
+            score += 1;
+        }
+        if (volunteer.isCanWorkWithChildren() == opportunity.isCanWorkWithChildren()) {
+            score += 1;
+        }
+        if (volunteer.isCanWorkWithElderly() == opportunity.isCanWorkWithElderly()) {
+            score += 1;
+        }
+        if (volunteer.isHasFirstAidCertification() == opportunity.isHasFirstAidCertification()) {
+            score += 1;
+        }
+        if (volunteer.isCanTravel() == opportunity.isCanTravel()) {
+            score += 1;
+        }
+        if (score >= 8) {
+            return "Excellent";
+        } else if (score >= 5) {
+            return "Good";
+        } else if (score >= 3) {
+            return "Average";
+        } else {
+            return "Poor";
+        }
     }
 }
