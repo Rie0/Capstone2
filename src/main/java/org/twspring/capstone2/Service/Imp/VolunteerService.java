@@ -39,14 +39,13 @@ public class VolunteerService implements IVolunteerService {
         if (existingVolunteer == null) {
             throw new EntityNotFoundException("Volunteer with ID " + id + " not found");
         }
-        //commented values are the ones that doesn't make since to change...
 
-        // Update fields from User
+        //commented fields are the ones that don't make sense to change
         existingVolunteer.setUsername(volunteer.getUsername());
         existingVolunteer.setEmail(volunteer.getEmail());
         existingVolunteer.setPhoneNumber(volunteer.getPhoneNumber());
-        existingVolunteer.setFirstName(volunteer.getFirstName());
-        existingVolunteer.setLastName(volunteer.getLastName());
+//        existingVolunteer.setFirstName(volunteer.getFirstName());
+//        existingVolunteer.setLastName(volunteer.getLastName());
         existingVolunteer.setPassword(volunteer.getPassword());
         //existingVolunteer.setGender(volunteer.getGender());
         existingVolunteer.setEmploymentStatus(volunteer.getEmploymentStatus());
@@ -61,7 +60,6 @@ public class VolunteerService implements IVolunteerService {
         existingVolunteer.setPrefersTeamwork(volunteer.isPrefersTeamwork());
         existingVolunteer.setPrefersSoloWork(volunteer.isPrefersSoloWork());
         existingVolunteer.setPreferredVolunteeringTypeId(volunteer.getPreferredVolunteeringTypeId());
-        // Stats fields are not updated as they are managed separately
         volunteerRepository.save(existingVolunteer);
     }
 

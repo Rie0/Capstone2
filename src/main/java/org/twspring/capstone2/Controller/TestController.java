@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.twspring.capstone2.Model.Organizations.Organization;
 import org.twspring.capstone2.Model.Organizations.University;
 import org.twspring.capstone2.Model.Users.*;
+import org.twspring.capstone2.Model.Volunteering.VolunteeringType;
 import org.twspring.capstone2.Service.Imp.*;
 
 @RestController
@@ -19,6 +20,7 @@ public class TestController {
     private final UniversityStaffService universityStaffService;
     private final OrganizerService organizerService;
     private final VolunteerService volunteerService;
+    private final VolunteeringTypeService volunteeringTypeService;
 
     @PostMapping("/create-test-entities")
     public ResponseEntity createTestEntities() {
@@ -113,24 +115,32 @@ public class TestController {
         //Volunteers
         Volunteer volunteer1 = new Volunteer(
                 null, "volunteer1@gmail.com", "paSsswo#rd123", "volunteer1", "Aisha", "Bassam", 25, "+966512345678",
-                "F", "university student", "Bio of Volunteer 1", true, true, false, true, false, true, true, true,
+                "F", "university student", "Bio of Volunteer 1 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", true, true, false, true, false, true, true, true,
                 false, 1, 0, 0, 0
         );
 
         Volunteer volunteer2 = new Volunteer(
                 null, "volunteer2@gmail.com", "P@ssw0rd123", "volunteer2", "Fahad", "Mansoor", 22, "+966512345681",
-                "M", "university student", "Bio of Volunteer 2", true, false, false, true, true, false, false, true,
+                "M", "university student", "Bio of Volunteer 2 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", true, false, false, true, true, false, false, true,
                 true, 2, 1, 0, 0
         );
 
         Volunteer volunteer3 = new Volunteer(
                 null, "volunteer3@gmail.com", "Str0ngP@ssw0rd", "volunteer3", "Layla", "Saeed", 28, "+966512345680",
-                "F", "unemployed", "Bio of Volunteer 3", false, true, true, false, true, true, true, true,
+                "F", "unemployed", "Bio of Volunteer 3 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", false, true, true, false, true, true, true, true,
                 true, 3, 2, 1, 0
         );
         volunteerService.addVolunteer(volunteer1);
         volunteerService.addVolunteer(volunteer2);
         volunteerService.addVolunteer(volunteer3);
+
+        // Volunteering Types
+        VolunteeringType type1 = new VolunteeringType(null, "Environmental");
+        VolunteeringType type2 = new VolunteeringType(null, "Educational");
+        VolunteeringType type3 = new VolunteeringType(null, "Health");
+        volunteeringTypeService.addVolunteeringType(type1);
+        volunteeringTypeService.addVolunteeringType(type2);
+        volunteeringTypeService.addVolunteeringType(type3);
 
         return ResponseEntity.status(201).body("Test entities created successfully");
     }

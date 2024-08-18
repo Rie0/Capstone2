@@ -9,5 +9,8 @@ import java.util.List;
 @Repository
 public interface VolunteeringOpportunityRepository extends JpaRepository<VolunteeringOpportunity, Integer> {
     VolunteeringOpportunity findVolunteeringOpportunityById(Integer id);
+
     List<VolunteeringOpportunity> findVolunteeringOpportunityByOrganizationId(Integer id);
+
+
 }

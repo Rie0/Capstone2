@@ -1,6 +1,5 @@
 package org.twspring.capstone2.Service.Imp;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.twspring.capstone2.Api.ApiException;
@@ -20,7 +19,7 @@ public class AdminService implements IAdminService {
     public List<Admin> getAllAdmins() {
         List<Admin> admins = adminRepository.findAll();
         if (admins.isEmpty()) {
-            throw new EntityNotFoundException("No admins found");
+            throw new ApiException("No admins found");
         }
         return admins;
     }
@@ -36,12 +35,12 @@ public class AdminService implements IAdminService {
         if(a == null) {
             throw new ApiException("Admin with ID "+id+" not found");
         }
-        //commented are the ones that doesn't make sense to change
+        //commented fields are the ones that don't make sense to change
         a.setEmail(admin.getEmail());
         a.setPhoneNumber(admin.getPhoneNumber());
         a.setUsername(admin.getUsername());
-        a.setFirstName(admin.getFirstName());
-        a.setLastName(admin.getLastName());
+        //a.setFirstName(admin.getFirstName());
+        //a.setLastName(admin.getLastName());
         a.setPassword(admin.getPassword());
         adminRepository.save(a);
     }
