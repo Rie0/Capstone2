@@ -77,6 +77,10 @@ public class Volunteer extends User {
     private Integer preferredVolunteeringTypeId;
 
     // Stats
+    @Column(columnDefinition = "INT DEFAULT 0")
+    @PositiveOrZero( message = "Number of hours Completed cannot be negative")
+    private Integer numberOfHours;
+
     @Column(columnDefinition = "INT NOT NULL DEFAULT 0")
     @PositiveOrZero( message = "Number of Opportunities Completed cannot be negative")
     private Integer numberOfOpportunitiesCompleted;
@@ -95,7 +99,7 @@ public class Volunteer extends User {
                      boolean isPhysicallyFit, boolean isAvailableForWeekends, boolean hasDriversLicense,
                      boolean canWorkWithChildren, boolean canWorkWithElderly, boolean hasFirstAidCertification,
                      boolean canTravel, boolean prefersTeamwork, boolean prefersSoloWork,
-                     Integer preferredVolunteeringTypeId, Integer numberOfOpportunitiesCompleted,
+                     Integer preferredVolunteeringTypeId, Integer numberOfHours, Integer numberOfOpportunitiesCompleted,
                      Integer numberOfOpportunitiesWithdrew, Integer numberOfOpportunitiesKicked) {
         super(email, password, username, firstName, lastName, age, phoneNumber);
         this.id = id;
@@ -112,6 +116,7 @@ public class Volunteer extends User {
         this.prefersTeamwork = prefersTeamwork;
         this.prefersSoloWork = prefersSoloWork;
         this.preferredVolunteeringTypeId = preferredVolunteeringTypeId;
+        this.numberOfHours = numberOfHours;
         this.numberOfOpportunitiesCompleted = numberOfOpportunitiesCompleted;
         this.numberOfOpportunitiesWithdrew = numberOfOpportunitiesWithdrew;
         this.numberOfOpportunitiesKicked = numberOfOpportunitiesKicked;
@@ -125,6 +130,4 @@ public class Volunteer extends User {
     //top 3 volunteers per month/week will be displayed (Get request to get top 3 volunteers by gained hours)
 
     //top 3 volunteers of all time (by <Integer> badge_Ids count)
-
-    //has their own search by opportunities they can enlist to
 
