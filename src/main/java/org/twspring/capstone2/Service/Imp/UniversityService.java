@@ -118,6 +118,9 @@ public class UniversityService implements IUniversityService {
             }else {
                 throw new ApiException ("Volunteering opportunity with ID " + opportunityId + " doesn't exist");
             }
+            if (!volunteeringOpportunityRepository.findVolunteeringOpportunityById(opportunityId).isRegistrationOpen()){
+                throw new ApiException("The volunteering opportunity registration is not open");
+            }
         } else {
             throw new ApiException("Opportunity with ID " + opportunityId + " is already suggested to this university");
         }
