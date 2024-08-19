@@ -33,7 +33,7 @@ public class UniversityService implements IUniversityService {
         return universities;
     }
 
-    //@Override
+    @Override
     public List<Volunteer> getAllStudents(Integer universityId, Integer universityStaffId) {
         University university = universityRepository.findById(universityId).orElseThrow(() ->
                 new ApiException("University with ID " + universityId + " not found"));
@@ -73,7 +73,7 @@ public class UniversityService implements IUniversityService {
         existingUniversity.setName(university.getName());
         universityRepository.save(existingUniversity);
     }
-    //@Override
+    @Override
     public void addStudentToUniversity(Integer universityId, Integer universityStaffId, Integer volunteerId) {
         University university = universityRepository.findById(universityId).orElseThrow(() ->
                 new ApiException("University with ID " + universityId + " not found"));
@@ -99,7 +99,7 @@ public class UniversityService implements IUniversityService {
         }
     }
 
-    //@Override
+    @Override
     public void addSuggestedOpportunityToUniversity(Integer universityId, Integer universityStaffId, Integer opportunityId) {
         University university = universityRepository.findById(universityId).orElseThrow(() ->
                 new ApiException("University with ID " + universityId + " not found"));
