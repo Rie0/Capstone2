@@ -44,9 +44,9 @@ public class TestController {
 
 
         // Universities
-        University university1 = new University(null, "University1");
-        University university2 = new University(null, "University2");
-        University university3 = new University(null, "University3");
+        University university1 = new University(null, "University1",null,null);
+        University university2 = new University(null, "University2",null,null);
+        University university3 = new University(null, "University3",null,null);
 
         universityService.addUniversity(university1);
         universityService.addUniversity(university2);
