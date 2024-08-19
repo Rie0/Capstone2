@@ -16,14 +16,30 @@ public class UniversityController {
     private final UniversityService universityService;
 
     //===========================GET===========================
+
     @GetMapping("/get/all")
     public ResponseEntity getAllUniversities() {
         return ResponseEntity.status(200).body(universityService.getAllUniversities());
     }
 
+    @GetMapping("/students/{universityId}")
+    public ResponseEntity getAllStudents(
+            @PathVariable Integer universityId) {
+        return ResponseEntity.status(200).body(universityService.getAllStudents(universityId));
+    }
+
+    @GetMapping("/suggested-opportunities/{universityId}/{studentId}")
+    public ResponseEntity getSuggestedOpportunitiesForStudents(
+            @PathVariable Integer universityId,
+            @PathVariable Integer studentId) {
+        return ResponseEntity.status(200).body(universityService.getSuggestedOpportunitiesForStudents(universityId, studentId));
+    }
+
     //===========================POST===========================
     @PostMapping("/add")
-    public ResponseEntity addUniversity(@Valid @RequestBody University university, Errors errors) {
+    public ResponseEntity addUniversity(
+            @Valid @RequestBody University university,
+            Errors errors) {
         if (errors.hasErrors()) {
             String message = errors.getFieldError().getDefaultMessage();
             return ResponseEntity.status(404).body(message);
@@ -31,16 +47,31 @@ public class UniversityController {
         universityService.addUniversity(university);
         return ResponseEntity.status(201).body(new ApiResponse("University added successfully"));
     }
-
     //===========================PUT===========================
     @PutMapping("/update/{university_id}")
-    public ResponseEntity updateUniversity(@PathVariable Integer university_id, @Valid @RequestBody University university, Errors errors) {
+    public ResponseEntity updateUniversity(@PathVariable Integer university_id,
+                                           @Valid @RequestBody University university,
+                                           Errors errors) {
         if (errors.hasErrors()) {
             String message = errors.getFieldError().getDefaultMessage();
             return ResponseEntity.status(404).body(message);
         }
         universityService.updateUniversity(university_id, university);
         return ResponseEntity.status(200).body(new ApiResponse("University updated successfully"));
+    }
+    @PutMapping("/add-student/{universityId}/{volunteerId}") //add only students
+    public ResponseEntity addStudentToUniversity(
+            @PathVariable Integer universityId,
+            @PathVariable Integer volunteerId) {
+        universityService.addStudentToUniversity(universityId, volunteerId);
+        return ResponseEntity.status(201).body(new ApiResponse("Student added successfully"));
+    }
+    @PutMapping("/add-suggested-opportunity/{universityId}/{opportunityId}")
+    public ResponseEntity addSuggestedOpportunity(
+            @PathVariable Integer universityId,
+            @PathVariable Integer opportunityId) {
+        universityService.addSuggestedOpportunityToUniversity(universityId, opportunityId);
+        return ResponseEntity.status(201).body(new ApiResponse("Opportunity suggested successfully"));
     }
 
     //===========================DELETE===========================
