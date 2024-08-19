@@ -35,7 +35,9 @@ public class AdminController {
 
     //===========================PUT===========================
     @PutMapping("/update/{admin_id}")
-    public ResponseEntity updateAdmin(@PathVariable Integer admin_id, @Valid @RequestBody Admin admin, Errors errors) {
+    public ResponseEntity updateAdmin(@PathVariable Integer admin_id,
+                                      @Valid @RequestBody Admin admin,
+                                      Errors errors) {
         if (errors.hasErrors()) {
             String message = errors.getFieldError().getDefaultMessage();
             return ResponseEntity.status(404).body(message);

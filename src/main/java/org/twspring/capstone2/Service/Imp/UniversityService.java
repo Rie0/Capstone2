@@ -41,9 +41,13 @@ public class UniversityService implements IUniversityService {
     }
 
     //@Override
-    public List<VolunteeringOpportunity> getSuggestedOpportunitiesForStudents(Integer universityId) {
+    public List<VolunteeringOpportunity> getSuggestedOpportunitiesForStudents(Integer universityId, Integer studentId) {
         University university = universityRepository.findById(universityId).orElseThrow(() ->
                 new ApiException("University with ID " + universityId + " not found"));
+
+        if (!university.getStudentIds().contains(studentId)) {
+            throw new ApiException("Student with ID " + studentId + " is not enrolled in this university");
+        }
 
         List<Integer> suggestedOpportunityIds = university.getSuggestedOpportunityIds();
         return volunteeringOpportunityRepository.findAllById(suggestedOpportunityIds);
@@ -54,16 +58,25 @@ public class UniversityService implements IUniversityService {
         universityRepository.save(university);
     }
 
+    @Override
+    public void updateUniversity(Integer id, University university) {
+        University existingUniversity = universityRepository.findUniversityById(id);
+        if (existingUniversity == null) {
+            throw new ApiException("University with ID " + id + " not found");
+        }
+        existingUniversity.setName(university.getName());
+        universityRepository.save(existingUniversity);
+    }
     //@Override
     public void addStudentToUniversity(Integer universityId, Integer volunteerId) {
         University university = universityRepository.findById(universityId).orElseThrow(() ->
                 new ApiException("University with ID " + universityId + " not found"));
 
-        Volunteer volunteer = volunteerRepository.findById(volunteerId).orElseThrow(() ->
-                new ApiException("Volunteer with ID " + volunteerId + " not found"));
-
         List<Integer> studentIds = university.getStudentIds();
         if (!studentIds.contains(volunteerId)) {
+            if (!volunteerRepository.findVolunteerById(volunteerId).getEmploymentStatus().equalsIgnoreCase("university student")) {
+                throw new ApiException("Volunteer with ID " + volunteerId + " is not a student");
+            }
             studentIds.add(volunteerId);
             university.setStudentIds(studentIds);
             universityRepository.save(university);
@@ -77,9 +90,6 @@ public class UniversityService implements IUniversityService {
         University university = universityRepository.findById(universityId).orElseThrow(() ->
                 new ApiException("University with ID " + universityId + " not found"));
 
-        VolunteeringOpportunity opportunity = volunteeringOpportunityRepository.findById(opportunityId).orElseThrow(() ->
-                new ApiException("Volunteering opportunity with ID " + opportunityId + " not found"));
-
         List<Integer> suggestedOpportunityIds = university.getSuggestedOpportunityIds();
         if (!suggestedOpportunityIds.contains(opportunityId)) {
             suggestedOpportunityIds.add(opportunityId);
@@ -88,16 +98,6 @@ public class UniversityService implements IUniversityService {
         } else {
             throw new ApiException("Opportunity with ID " + opportunityId + " is already suggested to this university");
         }
-    }
-
-    @Override
-    public void updateUniversity(Integer id, University university) {
-        University existingUniversity = universityRepository.findUniversityById(id);
-        if (existingUniversity == null) {
-            throw new ApiException("University with ID " + id + " not found");
-        }
-        existingUniversity.setName(university.getName());
-        universityRepository.save(existingUniversity);
     }
 
     @Override

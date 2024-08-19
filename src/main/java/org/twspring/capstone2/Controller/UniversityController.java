@@ -28,10 +28,11 @@ public class UniversityController {
         return ResponseEntity.status(200).body(universityService.getAllStudents(universityId));
     }
 
-    @GetMapping("/suggested-opportunities/{universityId}")
+    @GetMapping("/suggested-opportunities/{universityId}/{studentId}")
     public ResponseEntity getSuggestedOpportunitiesForStudents(
-            @PathVariable Integer universityId) {
-        return ResponseEntity.status(200).body(universityService.getSuggestedOpportunitiesForStudents(universityId));
+            @PathVariable Integer universityId,
+            @PathVariable Integer studentId) {
+        return ResponseEntity.status(200).body(universityService.getSuggestedOpportunitiesForStudents(universityId, studentId));
     }
 
     //===========================POST===========================
@@ -46,21 +47,6 @@ public class UniversityController {
         universityService.addUniversity(university);
         return ResponseEntity.status(201).body(new ApiResponse("University added successfully"));
     }
-    @PostMapping("/add-student/{universityId}/{volunteerId}") //add only students
-    public ResponseEntity addStudentToUniversity(
-            @PathVariable Integer universityId,
-            @PathVariable Integer volunteerId) {
-        universityService.addStudentToUniversity(universityId, volunteerId);
-        return ResponseEntity.status(201).body(new ApiResponse("Student added successfully"));
-    }
-    @PostMapping("/add-suggested-opportunity/{universityId}/{opportunityId}")
-    public ResponseEntity addSuggestedOpportunity(
-            @PathVariable Integer universityId,
-            @PathVariable Integer opportunityId) {
-        universityService.addSuggestedOpportunityToUniversity(universityId, opportunityId);
-        return ResponseEntity.status(201).body(new ApiResponse("Opportunity suggested successfully"));
-    }
-
     //===========================PUT===========================
     @PutMapping("/update/{university_id}")
     public ResponseEntity updateUniversity(@PathVariable Integer university_id,
@@ -72,6 +58,20 @@ public class UniversityController {
         }
         universityService.updateUniversity(university_id, university);
         return ResponseEntity.status(200).body(new ApiResponse("University updated successfully"));
+    }
+    @PutMapping("/add-student/{universityId}/{volunteerId}") //add only students
+    public ResponseEntity addStudentToUniversity(
+            @PathVariable Integer universityId,
+            @PathVariable Integer volunteerId) {
+        universityService.addStudentToUniversity(universityId, volunteerId);
+        return ResponseEntity.status(201).body(new ApiResponse("Student added successfully"));
+    }
+    @PutMapping("/add-suggested-opportunity/{universityId}/{opportunityId}")
+    public ResponseEntity addSuggestedOpportunity(
+            @PathVariable Integer universityId,
+            @PathVariable Integer opportunityId) {
+        universityService.addSuggestedOpportunityToUniversity(universityId, opportunityId);
+        return ResponseEntity.status(201).body(new ApiResponse("Opportunity suggested successfully"));
     }
 
     //===========================DELETE===========================
