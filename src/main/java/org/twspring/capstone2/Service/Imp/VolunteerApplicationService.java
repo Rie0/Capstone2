@@ -58,7 +58,7 @@ public class VolunteerApplicationService implements IVolunteerApplicationService
         if (vo.getSupervisorId() != supervisorId) {
             throw new ApiException("Only the supervisor of this opportunity can view the applications");
         }
-        List<VolunteerApplication> volunteerApplications = volunteerApplicationRepository.findBestQualifiedVolunteerApplications();
+        List<VolunteerApplication> volunteerApplications = volunteerApplicationRepository.findBestQualifiedVolunteerApplications(opportunityId);
         if (volunteerApplications.isEmpty()) {
             throw new ApiException("No best-qualified applications found");
         }
@@ -155,7 +155,7 @@ public class VolunteerApplicationService implements IVolunteerApplicationService
             opportunity.setRegistrationOpen(false);
             volunteeringOpportunityRepository.save(opportunity);
         //Edit reject pending volunteers
-        List<VolunteerApplication> applications = volunteerApplicationRepository.findVolunteerApplicationWithPendingStatus();
+        List<VolunteerApplication> applications = volunteerApplicationRepository.findVolunteerApplicationWithPendingStatus(opportunityId);
         for (VolunteerApplication application : applications) {
             application.setStatus("Rejected");
             volunteerApplicationRepository.save(application);

@@ -11,7 +11,6 @@ import org.twspring.capstone2.Repository.VolunteerRepository;
 import org.twspring.capstone2.Repository.VolunteeringOpportunityRepository;
 import org.twspring.capstone2.Service.Interfaces.IUniversityService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -40,7 +39,7 @@ public class UniversityService implements IUniversityService {
         return volunteerRepository.findAllById(studentIds);
     }
 
-    //@Override
+    @Override
     public List<VolunteeringOpportunity> getSuggestedOpportunitiesForStudents(Integer universityId, Integer studentId) {
         University university = universityRepository.findById(universityId).orElseThrow(() ->
                 new ApiException("University with ID " + universityId + " not found"));

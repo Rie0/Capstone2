@@ -34,7 +34,7 @@ public class VolunteerService implements IVolunteerService {
         if (volunteer == null) {
             throw new ApiException("Volunteer with ID " + volunteerId + " not found");
         }
-        // Remove personal info
+        // hide personal info
         volunteer.setEmail(null);
         volunteer.setPhoneNumber(null);
         volunteer.setPassword(null);
@@ -51,7 +51,7 @@ public class VolunteerService implements IVolunteerService {
         if (volunteer == null) {
             throw new ApiException("Volunteer with ID " + volunteerId + " not found");
         }
-        // Remove password
+        // hide password
         volunteer.setPassword(null);
         return volunteer;
     }

@@ -34,7 +34,9 @@ public class OrganizerController {
 
     //===========================PUT===========================
     @PutMapping("/update/{organizer_id}")
-    public ResponseEntity updateOrganizer(@PathVariable Integer organizer_id, @Valid @RequestBody Organizer organizer, Errors errors) {
+    public ResponseEntity updateOrganizer(@PathVariable Integer organizer_id,
+                                          @Valid @RequestBody Organizer organizer,
+                                          Errors errors) {
         if (errors.hasErrors()) {
             String message = errors.getFieldError().getDefaultMessage();
             return ResponseEntity.status(404).body(message);

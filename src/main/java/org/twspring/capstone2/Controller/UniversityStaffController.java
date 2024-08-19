@@ -23,7 +23,8 @@ public class UniversityStaffController {
 
     //===========================POST===========================
     @PostMapping("/add")
-    public ResponseEntity addUniversityStaff(@Valid @RequestBody UniversityStaff universityStaff, Errors errors) {
+    public ResponseEntity addUniversityStaff(@Valid @RequestBody UniversityStaff universityStaff,
+                                             Errors errors) {
         if (errors.hasErrors()) {
             String message = errors.getFieldError().getDefaultMessage();
             return ResponseEntity.status(404).body(message);
@@ -34,7 +35,9 @@ public class UniversityStaffController {
 
     //===========================PUT===========================
     @PutMapping("/update/{staff_id}")
-    public ResponseEntity updateUniversityStaff(@PathVariable Integer staff_id, @Valid @RequestBody UniversityStaff universityStaff, Errors errors) {
+    public ResponseEntity updateUniversityStaff(@PathVariable Integer staff_id,
+                                                @Valid @RequestBody UniversityStaff universityStaff,
+                                                Errors errors) {
         if (errors.hasErrors()) {
             String message = errors.getFieldError().getDefaultMessage();
             return ResponseEntity.status(404).body(message);

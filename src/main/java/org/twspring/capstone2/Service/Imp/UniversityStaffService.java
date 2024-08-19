@@ -1,8 +1,8 @@
 package org.twspring.capstone2.Service.Imp;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.twspring.capstone2.Api.ApiException;
 import org.twspring.capstone2.Model.Users.UniversityStaff;
 import org.twspring.capstone2.Repository.UniversityStaffRepository;
 import org.twspring.capstone2.Service.Interfaces.IUniversityStaffService;
@@ -19,7 +19,7 @@ public class UniversityStaffService implements IUniversityStaffService {
     public List<UniversityStaff> getAllUniversityStaff() {
         List<UniversityStaff> universityStaff = universityStaffRepository.findAll();
         if (universityStaff.isEmpty()) {
-            throw new EntityNotFoundException("No university staff found");
+            throw new ApiException("No university staff found");
         }
         return universityStaff;
     }
@@ -33,7 +33,7 @@ public class UniversityStaffService implements IUniversityStaffService {
     public void updateUniversityStaff(Integer id, UniversityStaff universityStaff) {
         UniversityStaff existingStaff = universityStaffRepository.findUniversityStaffById(id);
         if (existingStaff == null) {
-            throw new EntityNotFoundException("University staff with ID " + id + " not found");
+            throw new ApiException("University staff with ID " + id + " not found");
         }
         //commented fields are the ones that don't make sense to change
         existingStaff.setEmail(universityStaff.getEmail());
@@ -50,7 +50,7 @@ public class UniversityStaffService implements IUniversityStaffService {
     public void deleteUniversityStaff(Integer id) {
         UniversityStaff universityStaff = universityStaffRepository.findUniversityStaffById(id);
         if (universityStaff == null) {
-            throw new EntityNotFoundException("University staff with ID " + id + " not found");
+            throw new ApiException("University staff with ID " + id + " not found");
         }
         universityStaffRepository.delete(universityStaff);
     }

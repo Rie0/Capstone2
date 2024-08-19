@@ -23,7 +23,8 @@ public class OrganizationController {
 
     //===========================POST===========================
     @PostMapping("/add")
-    public ResponseEntity addOrganization(@Valid @RequestBody Organization organization, Errors errors) {
+    public ResponseEntity addOrganization(@Valid @RequestBody Organization organization,
+                                          Errors errors) {
         if (errors.hasErrors()) {
             String message = errors.getFieldError().getDefaultMessage();
             return ResponseEntity.status(404).body(message);
@@ -34,7 +35,9 @@ public class OrganizationController {
 
     //===========================PUT===========================
     @PutMapping("/update/{organization_id}")
-    public ResponseEntity updateOrganization(@PathVariable Integer organization_id, @Valid @RequestBody Organization organization, Errors errors) {
+    public ResponseEntity updateOrganization(@PathVariable Integer organization_id,
+                                             @Valid @RequestBody Organization organization,
+                                             Errors errors) {
         if (errors.hasErrors()) {
             String message = errors.getFieldError().getDefaultMessage();
             return ResponseEntity.status(404).body(message);
