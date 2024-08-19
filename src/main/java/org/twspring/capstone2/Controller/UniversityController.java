@@ -22,10 +22,12 @@ public class UniversityController {
         return ResponseEntity.status(200).body(universityService.getAllUniversities());
     }
 
-    @GetMapping("/students/{universityId}")
+    @GetMapping("/students/{universityId}/{universityStaffId}")
     public ResponseEntity getAllStudents(
-            @PathVariable Integer universityId) {
-        return ResponseEntity.status(200).body(universityService.getAllStudents(universityId));
+            @PathVariable Integer universityId,
+            @PathVariable Integer universityStaffId
+    ) {
+        return ResponseEntity.status(200).body(universityService.getAllStudents(universityId, universityStaffId));
     }
 
     @GetMapping("/suggested-opportunities/{universityId}/{studentId}")
@@ -59,18 +61,20 @@ public class UniversityController {
         universityService.updateUniversity(university_id, university);
         return ResponseEntity.status(200).body(new ApiResponse("University updated successfully"));
     }
-    @PutMapping("/add-student/{universityId}/{volunteerId}")
+    @PutMapping("/add-student/{universityId}/{volunteerId}/{universityStaffId}")
     public ResponseEntity addStudentToUniversity(
             @PathVariable Integer universityId,
+            @PathVariable Integer universityStaffId,
             @PathVariable Integer volunteerId) {
-        universityService.addStudentToUniversity(universityId, volunteerId);
+        universityService.addStudentToUniversity(universityId, universityStaffId, volunteerId);
         return ResponseEntity.status(201).body(new ApiResponse("Student added successfully"));
     }
-    @PutMapping("/add-suggested-opportunity/{universityId}/{opportunityId}")
+    @PutMapping("/add-suggested-opportunity/{universityId}/{universityStaffId}/{opportunityId}")
     public ResponseEntity addSuggestedOpportunity(
             @PathVariable Integer universityId,
+            @PathVariable Integer universityStaffId,
             @PathVariable Integer opportunityId) {
-        universityService.addSuggestedOpportunityToUniversity(universityId, opportunityId);
+        universityService.addSuggestedOpportunityToUniversity(universityId, universityStaffId, opportunityId);
         return ResponseEntity.status(201).body(new ApiResponse("Opportunity suggested successfully"));
     }
 

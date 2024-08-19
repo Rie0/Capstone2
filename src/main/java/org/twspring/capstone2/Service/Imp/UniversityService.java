@@ -4,9 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.twspring.capstone2.Api.ApiException;
 import org.twspring.capstone2.Model.Organizations.University;
+import org.twspring.capstone2.Model.Users.UniversityStaff;
 import org.twspring.capstone2.Model.Users.Volunteer;
 import org.twspring.capstone2.Model.Volunteering.VolunteeringOpportunity;
 import org.twspring.capstone2.Repository.UniversityRepository;
+import org.twspring.capstone2.Repository.UniversityStaffRepository;
 import org.twspring.capstone2.Repository.VolunteerRepository;
 import org.twspring.capstone2.Repository.VolunteeringOpportunityRepository;
 import org.twspring.capstone2.Service.Interfaces.IUniversityService;
@@ -20,6 +22,7 @@ public class UniversityService implements IUniversityService {
     private final UniversityRepository universityRepository;
     private final VolunteerRepository volunteerRepository;
     private final VolunteeringOpportunityRepository volunteeringOpportunityRepository;
+    private final UniversityStaffRepository universityStaffRepository;
 
     @Override
     public List<University> getAllUniversities() {
@@ -31,10 +34,14 @@ public class UniversityService implements IUniversityService {
     }
 
     //@Override
-    public List<Volunteer> getAllStudents(Integer universityId) {
+    public List<Volunteer> getAllStudents(Integer universityId, Integer universityStaffId) {
         University university = universityRepository.findById(universityId).orElseThrow(() ->
                 new ApiException("University with ID " + universityId + " not found"));
-
+        UniversityStaff universityStaff = universityStaffRepository.findById(universityStaffId).orElseThrow(() ->
+                new ApiException("University Staff with ID " + universityStaffId + " not found"));
+        if (universityStaff.getUniversityId()!=university.getId()) {
+            throw new ApiException("University Staff with ID " + universityStaffId + " doesn't belong to the university");
+        }
         List<Integer> studentIds = university.getStudentIds();
         return volunteerRepository.findAllById(studentIds);
     }
@@ -67,33 +74,50 @@ public class UniversityService implements IUniversityService {
         universityRepository.save(existingUniversity);
     }
     //@Override
-    public void addStudentToUniversity(Integer universityId, Integer volunteerId) {
+    public void addStudentToUniversity(Integer universityId, Integer universityStaffId, Integer volunteerId) {
         University university = universityRepository.findById(universityId).orElseThrow(() ->
                 new ApiException("University with ID " + universityId + " not found"));
-
+        UniversityStaff universityStaff = universityStaffRepository.findById(universityStaffId).orElseThrow(() ->
+                new ApiException("University Staff with ID " + universityStaffId + " not found"));
+        if (universityStaff.getUniversityId()!=university.getId()) {
+            throw new ApiException("University Staff with ID " + universityStaffId + " doesn't belong to the university");
+        }
         List<Integer> studentIds = university.getStudentIds();
         if (!studentIds.contains(volunteerId)) {
-            if (!volunteerRepository.findVolunteerById(volunteerId).getEmploymentStatus().equalsIgnoreCase("university student")) {
-                throw new ApiException("Volunteer with ID " + volunteerId + " is not a student");
+            if (volunteerRepository.findVolunteerById(volunteerId)!=null) {
+                if (!volunteerRepository.findVolunteerById(volunteerId).getEmploymentStatus().equalsIgnoreCase("university student")) {
+                    throw new ApiException("Volunteer with ID " + volunteerId + " is not a student");
+                }
+                studentIds.add(volunteerId);
+                university.setStudentIds(studentIds);
+                universityRepository.save(university);
+            }else {
+                throw new ApiException("Volunteer with ID " + volunteerId + " doesn't exist");
             }
-            studentIds.add(volunteerId);
-            university.setStudentIds(studentIds);
-            universityRepository.save(university);
         } else {
             throw new ApiException("Volunteer with ID " + volunteerId + " is already a student at this university");
         }
     }
 
     //@Override
-    public void addSuggestedOpportunityToUniversity(Integer universityId, Integer opportunityId) {
+    public void addSuggestedOpportunityToUniversity(Integer universityId, Integer universityStaffId, Integer opportunityId) {
         University university = universityRepository.findById(universityId).orElseThrow(() ->
                 new ApiException("University with ID " + universityId + " not found"));
+        UniversityStaff universityStaff = universityStaffRepository.findById(universityStaffId).orElseThrow(() ->
+                new ApiException("University Staff with ID " + universityStaffId + " not found"));
+        if (universityStaff.getUniversityId()!=university.getId()) {
+            throw new ApiException("University Staff with ID " + universityStaffId + " doesn't belong to the university");
+        }
 
         List<Integer> suggestedOpportunityIds = university.getSuggestedOpportunityIds();
         if (!suggestedOpportunityIds.contains(opportunityId)) {
-            suggestedOpportunityIds.add(opportunityId);
-            university.setSuggestedOpportunityIds(suggestedOpportunityIds);
-            universityRepository.save(university);
+            if (volunteeringOpportunityRepository.findVolunteeringOpportunityById(opportunityId)!=null) {
+                suggestedOpportunityIds.add(opportunityId);
+                university.setSuggestedOpportunityIds(suggestedOpportunityIds);
+                universityRepository.save(university);
+            }else {
+                throw new ApiException ("Volunteering opportunity with ID " + opportunityId + " doesn't exist");
+            }
         } else {
             throw new ApiException("Opportunity with ID " + opportunityId + " is already suggested to this university");
         }
