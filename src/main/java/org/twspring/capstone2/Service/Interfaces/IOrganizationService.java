@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface IOrganizationService {
     List<Organization> getAllOrganizations();
-    void addOrganization(Organization organization);
+    void addOrganization(Integer adminId, Organization organization);
     void updateOrganization(Integer id, Organization organization);
     void deleteOrganization(Integer id);
 }

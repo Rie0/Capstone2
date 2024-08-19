@@ -22,14 +22,16 @@ public class OrganizationController {
     }
 
     //===========================POST===========================
-    @PostMapping("/add")
-    public ResponseEntity addOrganization(@Valid @RequestBody Organization organization,
+    @PostMapping("/add-organization/{adminId}")
+    public ResponseEntity addOrganization(
+            @PathVariable Integer adminId,
+            @Valid @RequestBody Organization organization,
                                           Errors errors) {
         if (errors.hasErrors()) {
             String message = errors.getFieldError().getDefaultMessage();
             return ResponseEntity.status(404).body(message);
         }
-        organizationService.addOrganization(organization);
+        organizationService.addOrganization(adminId,organization);
         return ResponseEntity.status(201).body(new ApiResponse("Organization added successfully"));
     }
 

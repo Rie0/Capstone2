@@ -26,32 +26,6 @@ public class TestController {
     public ResponseEntity createTestEntities() {
         //IDs are null to be auto generated
 
-        //Organizations
-        Organization org1 = new Organization(
-                null, "Organization1"
-        );
-
-        Organization org2 = new Organization(
-                null, "Organization2"
-        );
-
-        Organization org3 = new Organization(
-                null, "Organization3"
-        );
-        organizationService.addOrganization(org1);
-        organizationService.addOrganization(org2);
-        organizationService.addOrganization(org3);
-
-
-        // Universities
-        University university1 = new University(null, "University1",null,null);
-        University university2 = new University(null, "University2",null,null);
-        University university3 = new University(null, "University3",null,null);
-
-        universityService.addUniversity(university1);
-        universityService.addUniversity(university2);
-        universityService.addUniversity(university3);
-
         //Admins
         Admin admin1 = new Admin(
                 null, "admin1@gmail.com", "AdminP@ss123", "admin1", "Maha", "Ahmed", 35, "+966512345682"
@@ -68,6 +42,32 @@ public class TestController {
         adminService.addAdmin(admin1);
         adminService.addAdmin(admin2);
         adminService.addAdmin(admin3);
+
+        //Organizations
+        Organization org1 = new Organization(
+                null, "Organization1"
+        );
+
+        Organization org2 = new Organization(
+                null, "Organization2"
+        );
+
+        Organization org3 = new Organization(
+                null, "Organization3"
+        );
+        organizationService.addOrganization(1,org1);
+        organizationService.addOrganization(1,org2);
+        organizationService.addOrganization(1,org3);
+
+
+        // Universities
+        University university1 = new University(null, "University1",null,null);
+        University university2 = new University(null, "University2",null,null);
+        University university3 = new University(null, "University3",null,null);
+
+        universityService.addUniversity(university1);
+        universityService.addUniversity(university2);
+        universityService.addUniversity(university3);
 
         //Organizer
 

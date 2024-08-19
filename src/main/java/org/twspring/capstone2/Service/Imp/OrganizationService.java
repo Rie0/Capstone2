@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.twspring.capstone2.Api.ApiException;
 import org.twspring.capstone2.Model.Organizations.Organization;
+import org.twspring.capstone2.Model.Users.Admin;
+import org.twspring.capstone2.Repository.AdminRepository;
 import org.twspring.capstone2.Repository.OrganizationRepository;
 import org.twspring.capstone2.Service.Interfaces.IOrganizationService;
 
@@ -13,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class OrganizationService implements IOrganizationService {
 
+    private final AdminRepository adminRepository;
     private OrganizationRepository organizationRepository;
 
     @Override
@@ -25,12 +28,16 @@ public class OrganizationService implements IOrganizationService {
     }
 
     @Override
-    public void addOrganization(Organization organization) {
+    public void addOrganization(Integer adminId, Organization organization) {
+        Admin admin = adminRepository.findAdminById(adminId);
+        if (admin == null) {
+            throw new ApiException("Admin not found");
+        }
         organizationRepository.save(organization);
     }
 
     @Override
-    public void updateOrganization(Integer id, Organization organization) { //add more
+    public void updateOrganization(Integer id, Organization organization) {
         Organization org = organizationRepository.findOrganizationById(id);
         if (org == null) {
             throw new ApiException("Organization with ID"+ id +"not found");

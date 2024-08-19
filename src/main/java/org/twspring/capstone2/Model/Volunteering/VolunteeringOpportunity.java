@@ -30,7 +30,7 @@ public class VolunteeringOpportunity {
 
     @NotBlank(message = "Title cannot be blank")
     @Size(min = 10, max = 25, message = "Title must be between 10 and 25 characters")
-    @Column(columnDefinition = "VARCHAR(25) NOT NULL")
+    @Column(columnDefinition = "VARCHAR(25) NOT NULL UNIQUE")
     private String title;
 
     @NotNull(message = "Volunteering Type ID cannot be null")
@@ -49,7 +49,7 @@ public class VolunteeringOpportunity {
     @NotNull(message = "Post date cannot be null")
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(columnDefinition = "DATE NOT NULL DEFAULT TIMESTAMP(CURRENT_DATE)")
-    private LocalDate postDate; //final
+    private LocalDate postDate=LocalDate.now(); //final
 
     @NotNull(message = "Target hours cannot be null")
     @Positive( message = "Target hours must be at least 1")

@@ -262,10 +262,8 @@ public class VolunteerApplicationService implements IVolunteerApplicationService
             return "Excellent";
         } else if (score >= 5) {
             return "Good";
-        } else if (score >= 3) {
-            return "Average";
         } else {
-            return "Poor";
+            return "Average";
         }
     }
 }
