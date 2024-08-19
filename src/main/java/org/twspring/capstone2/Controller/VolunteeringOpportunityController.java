@@ -34,7 +34,6 @@ public class VolunteeringOpportunityController {
         return ResponseEntity.status(200).body(volunteeringOpportunityService.searchVolunteeringOpportunitiesByDescription(string));
     }
 
-
     //===========================POST===========================
     @PostMapping("/add/{organizationId}/{organizerId}")
     public ResponseEntity addVolunteeringOpportunity(
@@ -52,7 +51,7 @@ public class VolunteeringOpportunityController {
 
     //===========================PUT===========================
     @PutMapping("/update/{opportunityId}")
-    public ResponseEntity updateVolunteeringOpportunity( //edit
+    public ResponseEntity updateVolunteeringOpportunity(
             @PathVariable Integer opportunityId,
             @Valid @RequestBody VolunteeringOpportunity volunteeringOpportunity,
             Errors errors) {
@@ -65,7 +64,7 @@ public class VolunteeringOpportunityController {
     }
 
     //===========================DELETE===========================
-    @DeleteMapping("/delete/{opportunityId}") // fix validations
+    @DeleteMapping("/delete/{opportunityId}")
     public ResponseEntity deleteVolunteeringOpportunity(@PathVariable Integer opportunityId) {
         volunteeringOpportunityService.deleteVolunteeringOpportunity(opportunityId);
         return ResponseEntity.status(200).body(new ApiResponse("Volunteering opportunity deleted successfully"));

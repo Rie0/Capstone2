@@ -59,7 +59,7 @@ public class UniversityController {
         universityService.updateUniversity(university_id, university);
         return ResponseEntity.status(200).body(new ApiResponse("University updated successfully"));
     }
-    @PutMapping("/add-student/{universityId}/{volunteerId}") //add only students
+    @PutMapping("/add-student/{universityId}/{volunteerId}")
     public ResponseEntity addStudentToUniversity(
             @PathVariable Integer universityId,
             @PathVariable Integer volunteerId) {

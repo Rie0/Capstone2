@@ -33,7 +33,6 @@ public class VolunteerController {
         return ResponseEntity.status(200).body(volunteerService.getVolunteerProfileForOrganizer(organizerId, volunteerId));
     }
 
-
     //===========================POST===========================
     @PostMapping("/add")
     public ResponseEntity addVolunteer(@Valid @RequestBody Volunteer volunteer, Errors errors) {
@@ -55,8 +54,6 @@ public class VolunteerController {
         volunteerService.updateVolunteer(volunteer_id, volunteer);
         return ResponseEntity.status(200).body(new ApiResponse("Volunteer updated successfully"));
     }
-
-    //(3)edit only preferences
 
     //===========================DELETE===========================
     @DeleteMapping("/delete/{volunteer_id}")

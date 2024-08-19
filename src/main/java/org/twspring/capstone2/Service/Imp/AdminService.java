@@ -30,7 +30,7 @@ public class AdminService implements IAdminService {
     }
 
     @Override
-    public void updateAdmin(Integer id, Admin admin) { //might add more attributes
+    public void updateAdmin(Integer id, Admin admin) {
         Admin a = adminRepository.findAdminById(id);
         if(a == null) {
             throw new ApiException("Admin with ID "+id+" not found");

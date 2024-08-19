@@ -81,7 +81,7 @@ public class VolunteerProgressService implements IVolunteerProgressService {
             throw new ApiException("Note length must be between 25 and 500");
         }
 
-        // Update the comment
+        // Update the note
         volunteerProgress.setNotes(note);
         volunteerProgressRepository.save(volunteerProgress);
     }
@@ -129,7 +129,6 @@ public class VolunteerProgressService implements IVolunteerProgressService {
 
     }
 
-    //add notes
 
     @Override
     public void withdrawFromVolunteeringOpportunity(Integer id, Integer volunteerId) {

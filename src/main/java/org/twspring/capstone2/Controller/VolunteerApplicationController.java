@@ -15,7 +15,8 @@ public class VolunteerApplicationController {
 
     //===========================GET===========================
     @GetMapping("/get/all/{supervisorId}/{opportunityId}")
-    public ResponseEntity getAllVolunteerApplicationsForOpportunity(@PathVariable Integer supervisorId, @PathVariable Integer opportunityId) {
+    public ResponseEntity getAllVolunteerApplicationsForOpportunity(@PathVariable Integer supervisorId,
+                                                                    @PathVariable Integer opportunityId) {
         return ResponseEntity.status(200).body(volunteerApplicationService.getAllVolunteerApplicationsForOpportunity(supervisorId,opportunityId));
     }
 
