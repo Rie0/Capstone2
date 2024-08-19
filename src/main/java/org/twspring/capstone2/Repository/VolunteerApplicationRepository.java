@@ -16,4 +16,7 @@ public interface VolunteerApplicationRepository extends JpaRepository<VolunteerA
 
     @Query ("SELECT a FROM VolunteerApplication a WHERE a.status='Pending'")
     List<VolunteerApplication> findVolunteerApplicationWithPendingStatus();
+
+    @Query("SELECT a FROM VolunteerApplication a WHERE a.suitability='Excellent' OR a.suitability='Good' ORDER BY a.suitability")
+    List<VolunteerApplication> findBestQualifiedVolunteerApplications();
 }

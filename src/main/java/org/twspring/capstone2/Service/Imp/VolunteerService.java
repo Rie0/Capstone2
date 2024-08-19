@@ -1,9 +1,11 @@
 package org.twspring.capstone2.Service.Imp;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.twspring.capstone2.Api.ApiException;
+import org.twspring.capstone2.Model.Users.Organizer;
 import org.twspring.capstone2.Model.Users.Volunteer;
+import org.twspring.capstone2.Repository.OrganizerRepository;
 import org.twspring.capstone2.Repository.VolunteerRepository;
 import org.twspring.capstone2.Service.Interfaces.IVolunteerService;
 
@@ -14,15 +16,46 @@ import java.util.List;
 public class VolunteerService implements IVolunteerService {
 
     private final VolunteerRepository volunteerRepository;
+    private final OrganizerRepository organizerRepository;
 
     @Override
     public List<Volunteer> getAllVolunteers() {
         List<Volunteer> volunteers = volunteerRepository.findAll();
         if (volunteers.isEmpty()) {
-            throw new EntityNotFoundException("No volunteers found");
+            throw new ApiException("No volunteers found");
         }
         return volunteers;
     }
+
+    //
+    @Override
+    public Volunteer getVolunteerProfileForWatching(Integer volunteerId) {
+        Volunteer volunteer = volunteerRepository.findVolunteerById(volunteerId);
+        if (volunteer == null) {
+            throw new ApiException("Volunteer with ID " + volunteerId + " not found");
+        }
+        // Remove personal info
+        volunteer.setEmail(null);
+        volunteer.setPhoneNumber(null);
+        volunteer.setPassword(null);
+        return volunteer;
+    }
+
+    @Override
+    public Volunteer getVolunteerProfileForOrganizer(Integer organizerId, Integer volunteerId) {
+        Volunteer volunteer = volunteerRepository.findVolunteerById(volunteerId);
+        Organizer organizer = organizerRepository.findOrganizerById(organizerId);
+        if (organizer == null) {
+            throw new ApiException("Organizer with ID " + organizerId + " not found");
+        }
+        if (volunteer == null) {
+            throw new ApiException("Volunteer with ID " + volunteerId + " not found");
+        }
+        // Remove password
+        volunteer.setPassword(null);
+        return volunteer;
+    }
+
 
     @Override
     public void addVolunteer(Volunteer volunteer) {
@@ -37,7 +70,7 @@ public class VolunteerService implements IVolunteerService {
     public void updateVolunteer(Integer id, Volunteer volunteer) {
         Volunteer existingVolunteer = volunteerRepository.findVolunteerById(id);
         if (existingVolunteer == null) {
-            throw new EntityNotFoundException("Volunteer with ID " + id + " not found");
+            throw new ApiException("Volunteer with ID " + id + " not found");
         }
 
         //commented fields are the ones that don't make sense to change
@@ -67,7 +100,7 @@ public class VolunteerService implements IVolunteerService {
     public void deleteVolunteer(Integer id) {
         Volunteer volunteer = volunteerRepository.findVolunteerById(id);
         if (volunteer == null) {
-            throw new EntityNotFoundException("Volunteer with ID " + id + " not found");
+            throw new ApiException("Volunteer with ID " + id + " not found");
         }
         volunteerRepository.delete(volunteer);
     }

@@ -49,6 +49,22 @@ public class VolunteerApplicationService implements IVolunteerApplicationService
         return volunteerApplications;
     }
 
+    @Override
+    public List<VolunteerApplication> getBestQualifiedVolunteerApplicationsForOpportunity(Integer opportunityId, Integer supervisorId) {
+        VolunteeringOpportunity vo = volunteeringOpportunityRepository.findVolunteeringOpportunityById(opportunityId);
+        if (vo == null) {
+            throw new ApiException("Volunteering opportunity with id " + opportunityId + " not found");
+        }
+        if (vo.getSupervisorId() != supervisorId) {
+            throw new ApiException("Only the supervisor of this opportunity can view the applications");
+        }
+        List<VolunteerApplication> volunteerApplications = volunteerApplicationRepository.findBestQualifiedVolunteerApplications();
+        if (volunteerApplications.isEmpty()) {
+            throw new ApiException("No best-qualified applications found");
+        }
+        return volunteerApplications;
+    }
+
 
 
     @Override
@@ -92,6 +108,11 @@ public class VolunteerApplicationService implements IVolunteerApplicationService
         if (opportunity == null) {
             throw new ApiException("Volunteer with id " + opportunityId + " not found");
         }
+
+        if(!volunteerApplication.getOpportunityId().equals(opportunity.getId())){
+            throw new ApiException("Application doesn't belong to this opportunity");
+        }
+
         if (!opportunity.isRegistrationOpen()) {
             throw new ApiException("Volunteering Opportunity is closed");
         }
@@ -103,7 +124,7 @@ public class VolunteerApplicationService implements IVolunteerApplicationService
         if (organizer.getOrganizationId()!=opportunity.getOrganizationId()){
             throw new ApiException("Organizer doesn't belong to the organization");
         }
-        if (organizer.getId()!=opportunity.getId()){
+        if (organizer.getId()!=opportunity.getSupervisorId()){
             throw new ApiException("Only the supervisor of this opportunity can accept volunteers");
         }
 

@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -22,5 +24,12 @@ public class University {
     @Column(columnDefinition = "VARCHAR(25) NOT NULL UNIQUE")
     private String name;
 
-    //university must encourage its students to take more volunteering opportunity
+    @ElementCollection
+    private List<Integer> studentIds; // IDs of students enrolled in the university
+
+    @ElementCollection
+    private List<Integer> suggestedOpportunityIds; // IDs of suggested volunteering opportunities
 }
+
+    //university must encourage its students to take more volunteering opportunity
+

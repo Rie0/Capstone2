@@ -21,8 +21,18 @@ public class VolunteerController {
         return ResponseEntity.status(200).body(volunteerService.getAllVolunteers());
     }
 
-    //(1)Get volunteer's profile for watching (no personal info)
-    //(1)Get volunteer's profile for organizer (can see contact info, no password)
+    //Get volunteer's profile for watching (no personal info)
+    @GetMapping("/get/profile/{volunteerId}")
+    public ResponseEntity getVolunteerProfileForWatching(@PathVariable Integer volunteerId) {
+        return ResponseEntity.status(200).body(volunteerService.getVolunteerProfileForWatching(volunteerId));
+    }
+
+    //Get volunteer's profile for organizer (can see contact info, no password)
+    @GetMapping("/get/profile/{organizerId}/{volunteerId}")
+    public ResponseEntity getVolunteerProfileForOrganizer(@PathVariable Integer organizerId, @PathVariable Integer volunteerId) {
+        return ResponseEntity.status(200).body(volunteerService.getVolunteerProfileForOrganizer(organizerId, volunteerId));
+    }
+
 
     //===========================POST===========================
     @PostMapping("/add")

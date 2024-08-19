@@ -38,6 +38,28 @@ public class VolunteeringOpportunityService implements IVolunteeringOpportunityS
         return opportunities;
     }
 
+    // Method to find all open volunteering opportunities
+    @Override
+    public List<VolunteeringOpportunity> getOpenVolunteeringOpportunities() {
+        List<VolunteeringOpportunity> opportunities = volunteeringOpportunityRepository.findOpenVolunteeringOpportunities();
+        if (opportunities.isEmpty()) {
+            throw new ApiException("No volunteering opportunities found");
+        }
+        return opportunities;
+
+    }
+
+    // Method to search for volunteering opportunities by searching for a string in description
+    @Override
+    public List<VolunteeringOpportunity> searchVolunteeringOpportunitiesByDescription(String searchString) {
+        List<VolunteeringOpportunity> opportunities = volunteeringOpportunityRepository.findVolunteeringOpportunityByDescriptionContainingIgnoreCase(searchString);
+
+        if (opportunities.isEmpty()) {
+            throw new ApiException("No volunteering opportunities found");
+        }
+        return opportunities;
+    }
+
     @Override
     public void addVolunteeringOpportunity(Integer organizationId, Integer organizerId, VolunteeringOpportunity volunteeringOpportunity) {
         // Verify the organization

@@ -1,9 +1,7 @@
 package org.twspring.capstone2.Controller;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.twspring.capstone2.Api.ApiResponse;
 import org.twspring.capstone2.Service.Imp.VolunteerApplicationService;
@@ -26,6 +24,13 @@ public class VolunteerApplicationController {
         return ResponseEntity.status(200).body(volunteerApplicationService.getVolunteerApplicationsByVolunteerId(volunteerId));
     }
 
+    @GetMapping("/get/best-qualified/{supervisorId}/{opportunityId}")
+    public ResponseEntity getBestQualifiedVolunteerApplicationsForOpportunity(
+            @PathVariable Integer supervisorId,
+            @PathVariable Integer opportunityId) {
+        return ResponseEntity.status(200).body(volunteerApplicationService.getBestQualifiedVolunteerApplicationsForOpportunity(opportunityId, supervisorId));
+    }
+
     //===========================POST===========================
     @PostMapping("/apply/{volunteerId}/{volunteeringOpportunityId}")
     public ResponseEntity applyForVolunteeringOpportunity(@PathVariable Integer volunteerId,
@@ -35,11 +40,11 @@ public class VolunteerApplicationController {
     }
 
     //===========================PUT===========================
-    @PutMapping("/accept/{id}/{opportunityId}/{organizerId}")
+    @PutMapping("/accept/{id}/{volunteeringOpportunityId}/{organizerId}")
     public ResponseEntity acceptVolunteerIntoOpportunity(@PathVariable Integer id,
-                                                         @PathVariable Integer opportunityId,
+                                                         @PathVariable Integer volunteeringOpportunityId,
                                                          @PathVariable Integer organizerId) {
-        volunteerApplicationService.acceptVolunteerIntoOpportunity(id, opportunityId, organizerId);
+        volunteerApplicationService.acceptVolunteerIntoOpportunity(id, volunteeringOpportunityId, organizerId);
         return ResponseEntity.status(200).body(new ApiResponse("Volunteer accepted successfully"));
     }
 

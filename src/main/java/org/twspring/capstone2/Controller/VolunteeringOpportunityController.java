@@ -25,11 +25,15 @@ public class VolunteeringOpportunityController {
         return ResponseEntity.status(200).body(volunteeringOpportunityService.getVolunteeringOpportunitiesByOrganization(organizationId));
     }
 
-    //get for volunteer's eye
+    @GetMapping("/get/open-opportunities")
+    public ResponseEntity getOpenVolunteeringOpportunities() {
+        return ResponseEntity.status(200).body(volunteeringOpportunityService.getOpenVolunteeringOpportunities());
+    }
+    @GetMapping("/search/{string}")
+    public ResponseEntity searchVolunteeringOpportunities(@PathVariable String string) {
+        return ResponseEntity.status(200).body(volunteeringOpportunityService.searchVolunteeringOpportunitiesByDescription(string));
+    }
 
-    //(1)get all that fits the volunteer
-    //(3)get all by employment type
-    //get by various attributes
 
     //===========================POST===========================
     @PostMapping("/add/{organizationId}/{organizerId}")

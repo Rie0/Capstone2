@@ -7,6 +7,9 @@ import java.util.List;
 public interface IVolunteerApplicationService {
     List<VolunteerApplication> getAllVolunteerApplicationsForOpportunity(Integer opportunityId, Integer supervisorId);
     List<VolunteerApplication> getVolunteerApplicationsByVolunteerId(Integer volunteerId);
+
+    List<VolunteerApplication> getBestQualifiedVolunteerApplicationsForOpportunity(Integer opportunityId, Integer supervisorId);
+
     void applyForVolunteeringOpportunity(Integer volunteerId, Integer volunteeringOpportunityId);
     void acceptVolunteerIntoOpportunity(Integer id, Integer opportunityId, Integer organizerId);
     void rejectVolunteerFromOpportunity(Integer id, Integer opportunityId, Integer organizerId);
